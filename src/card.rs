@@ -1,3 +1,5 @@
+use std::ops::{Add, Sub};
+
 pub enum Suit {
     Hearts,
     Diamonds,
@@ -73,4 +75,41 @@ impl From<Card> for u32 {
     }
 }
 
+#[derive(Clone, Copy)]
 pub struct CardSet(u64);
+
+impl CardSet {
+
+    /// Return a cardset with no cards in it
+    pub fn empty() -> Self {
+        Self(0)
+    }
+
+    /// return number of cards in the set
+    pub fn len(self) -> u32 {
+        self.0.count_ones() 
+    }
+
+    /// Card at index `idx` in the set
+    pub fn at(self, idx: u32) -> Option<Card> {
+        todo!()
+    }
+}
+
+impl Add<Card> for CardSet {
+    type Output = CardSet;
+
+    fn add(self, rhs: Card) -> Self::Output {
+        let bit: u32 = rhs.into();
+        Self(self.0 | (1u64 << bit))
+    }
+}
+
+impl Sub<Card> for CardSet {
+    type Output = CardSet;
+
+    fn sub(self, rhs: Card) -> Self::Output {
+        let bit: u32 = rhs.into();
+        Self(self.0 & !(1u64 << bit))
+    }
+}
