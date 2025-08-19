@@ -67,6 +67,10 @@ pub struct Card {
     suit: Suit,
 }
 
+impl Card {
+    pub const COUNT: u32 = Suit::COUNT * Value::COUNT;
+}
+
 impl From<Card> for u32 {
     fn from(value: Card) -> Self {
         let suit: u32 = value.suit.into();
@@ -80,19 +84,25 @@ pub struct CardSet(u64);
 
 impl CardSet {
 
-    /// Return a cardset with no cards in it
     pub fn empty() -> Self {
         Self(0)
     }
 
-    /// return number of cards in the set
+    pub fn full() -> Self {
+        Self((1u64 << Card::COUNT) - 1)
+    }
+
+    pub fn contains(self, card: Card) -> bool {
+        let bit: u32 = card.into();
+        (self.0 & (1u64 << bit)) != 0
+    }
+
     pub fn len(self) -> u32 {
         self.0.count_ones() 
     }
 
-    /// Card at index `idx` in the set
     pub fn at(self, idx: u32) -> Option<Card> {
-        todo!()
+        todo!("Dont feel like it right now lmao")
     }
 }
 
